@@ -133,7 +133,7 @@ public:
 
   void HeadForwards(int X){
       ForwardParallelPos = BasePitchMid - X;
-      Serial.printf("\n ForwardParallelPos = %f.2\n", ForwardParallelPos);
+      //Serial.printf("\n ForwardParallelPos = %f.2\n", ForwardParallelPos);
       SetMotorAngle(sideParallelPos, ForwardParallelPos, LookUP, LookSide, Tilt, Ear);
    
   }

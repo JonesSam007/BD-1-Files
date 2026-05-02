@@ -60,13 +60,13 @@ public:
       ReadValues();
       //controller.read(&e);
       //Checks();
-      PrintValues();
+      //PrintValues();
       Connected = 1;
       
       
     }else {
       if (wasConnected){
-        Serial.printf("\n\n***************************************\n    Disconnected\n***************************************\n");
+        //Serial.printf("\n\n***************************************\n    Disconnected\n***************************************\n");
         wasConnected = false;
         
       }

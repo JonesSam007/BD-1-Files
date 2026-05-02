@@ -187,7 +187,7 @@ void setup() {
   controller.begin();
 
   //Controller check
-  if (!XController.CheckConnected()){Serial.printf("\n\n         Not Connected\n\n\n");}
+  //if (!XController.CheckConnected()){Serial.printf("\n\n         Not Connected\n\n\n");}
   
   pinMode(ledTorchPin, OUTPUT);
   pinMode(ledSidePin, OUTPUT);
@@ -223,7 +223,7 @@ void loop() {
         //digitalWrite(ledTorchPin, HIGH);
         digitalWrite(ledSidePin, HIGH);
         
-        Serial.printf("\n ON\n");
+        //Serial.printf("\n ON\n");
       }else {
         //removed due to always turning LEDoff eeven if auto turn on happens
         //digitalWrite(ledTorchPin, LOW);
@@ -236,12 +236,12 @@ void loop() {
         digitalWrite(ledTorchPin, HIGH);
         //digitalWrite(ledSidePin, HIGH);
         
-        Serial.printf("\n ON\n");
+        //Serial.printf("\n ON\n");
       }else {
         digitalWrite(ledTorchPin, LOW);
         //digitalWrite(ledSidePin, LOW);
         
-        Serial.printf("\n OFF\n");
+        //Serial.printf("\n OFF\n");
       }
 
       //bitRead(XController.LetterButton, 1)
@@ -271,8 +271,8 @@ void loop() {
             legRight.XYCalc(10, 200);
             legLeft.XYCalc(-5, 200);
 
-            // legRight.XYCalc(0, 200);
-            // legLeft.XYCalc(0, 200);
+            legRight.XYCalc(0, 200);
+            legLeft.XYCalc(0, 200);
 
             MPU6050.ReadValues();
             MPU6050.CalcPitRoll();
@@ -284,11 +284,11 @@ void loop() {
 
             double PitchCorrection = map(PIDPitch.OverallOutput, -100, 100, -30,30);
             double RollCorrection = map(PIDRoll.OverallOutput, -100, 100, -30,30);
-
-            // legLeft.LeftLeg(PIDPitch.OverallOutput);
-            // legRight.RightLeg(PIDPitch.OverallOutput);
-            // legLeft.LeftHip(PIDRoll.OverallOutput+10, 0);
-            // legRight.RightHip(PIDRoll.OverallOutput+10, 0);
+//////////////
+            legLeft.LeftLeg(PIDPitch.OverallOutput);
+            legRight.RightLeg(PIDPitch.OverallOutput);
+            legLeft.LeftHip(PIDRoll.OverallOutput+10, 0);
+            legRight.RightHip(PIDRoll.OverallOutput+10, 0);
             DriveMotor(PIDPitch.OverallOutput,(PIDRoll.OverallOutput+10),(PIDRoll.OverallOutput+10),0,0);
         }else{
           legRight.XYCalc(10, 200);
@@ -308,13 +308,14 @@ void loop() {
       }
       
       LEDFlashRate(_CheckFlash);
-    }else{      
-      Sat();
-
-      //Every 50 loops it switches value of LED
-      LEDFlashRate(25);
     }
+  }else{      
+    Sat();
+
+    //Every 50 loops it switches value of LED
+    LEDFlashRate(25);
   }
+  
   //legLeft.LeftHip(0, 0);
   //legRight.RightHip(0, 0);
   //classBD1.HeadForwards(5);

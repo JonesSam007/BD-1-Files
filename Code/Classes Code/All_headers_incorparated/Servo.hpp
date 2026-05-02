@@ -64,10 +64,10 @@ public:
     // keep radians in range
     if (CorrectedAngle < (MinDeg + OffSetDeg)) {
       CorrectedAngle = (MinDeg + OffSetDeg);
-      Serial.print("### ANGLE OUT OF RANGE (Lower) ###\n");
+      //Serial.print("### ANGLE OUT OF RANGE (Lower) ###\n");
     }else if (CorrectedAngle > (MaxDeg - OffSetDeg)) {
       CorrectedAngle = (MaxDeg - OffSetDeg);
-      Serial.print("### ANGLE OUT OF RANGE (Higher) ###\n");
+      //Serial.print("### ANGLE OUT OF RANGE (Higher) ###\n");
     }
 
     int pwmValue = DegToPWM((int)CorrectedAngle);

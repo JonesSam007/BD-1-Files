@@ -53,7 +53,7 @@ public:
     //Updates the last error used to the one just used
     LastError = Error;
 
-    Serial.printf("OverallOutput: %f.2\n", OverallOutput);
+    //Serial.printf("OverallOutput: %f.2\n", OverallOutput);
   }
 
 

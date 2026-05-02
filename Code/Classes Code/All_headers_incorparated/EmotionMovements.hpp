@@ -1,7 +1,10 @@
+#include "Arduino.h"
 #include "HardwareSerial.h"
 
 
 class EmotionsMovements{
+private:
+int PrevRSL = 0b0000;
 public:
 
   //Adafruit_PWMServoDriver& servoDriver;
@@ -61,7 +64,38 @@ public:
   }
 
 
+  void Randomised(){
+    int mood = random(10);
 
+    switch (mood) {
+      case 0:
+        Serial.printf("Happy\n");
+        Emote.happySound();
+
+        break;
+      case 1:
+        Serial.printf("curiousSound\n");
+        Emote.curiousSound();
+        break;
+      case 2:
+        Serial.printf("sadSound\n");
+        Emote.sadSound();
+        break;
+      case 3:
+        Serial.printf("alertSound\n");
+        Emote.alertSound();
+        break;
+      case 4:
+        Serial.printf("idleSound\n");
+        Emote.idleSound();
+        break;
+      case 5: Emote.backChat(); break;
+      case 6: Emote.muttering(); break;
+      case 7: Emote.nervous(); break;
+      case 8: Emote.scared(); break;
+      case 9: delay(100); break;
+    }
+  }
 
 
 
@@ -84,23 +118,35 @@ public:
       
       switch (XController.BumperButton){
         case 1:
-        Serial.printf("Right Stick\n");
+        //Serial.printf("Right Stick\n");
           switch (XController.LetterButton){
             case 1: //Y
-
+              if (!bitRead(PrevRSL, 0)){
+                Randomised();
+              }
             break;
             case 2: //X
+              if (!bitRead(PrevRSL, 1)){
+                Emote.backChat();
+              }
             break;
             case 4: //B
+              if (!bitRead(PrevRSL, 2)){
+                Emote.alertSound();
+              }
             break;
             case 8: //A
               //Happy
-              Happy();
+              if (!bitRead(PrevRSL, 3)){
+                Emote.happySound();
+              }
+              //XController.LetterButton = XController.LetterButton & 0b0111;
+              
             break;
           }
         break;
         case 2:
-        Serial.printf("Left Stick\n");
+        //Serial.printf("Left Stick\n");
         switch (XController.LetterButton){
           case 1: //Y
 
@@ -110,12 +156,13 @@ public:
           case 4: //B
           break;
           case 8: //A
+            //HeadNod();
           break;
         }
         break;
         case 3:
         legRight.Sit();
-        Serial.printf("Right Stick and Left\n");
+        //Serial.printf("Right Stick and Left\n");
         switch (XController.LetterButton){
           case 1: //Y
 
@@ -132,6 +179,8 @@ public:
       }
       Emote.Quiet();
       StickPressed = 1;
+      PrevRSL = XController.LetterButton;
+      XController.LetterButton = 0b0000;
       
     }else{StickPressed = 0;} //if none are pressed then normal motions 
 
