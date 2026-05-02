@@ -25,18 +25,18 @@ public:
   double theta4 = 0;
   double theta5 = 0;
 
+  //{115,111,130,115,90,100,165,25,165,55};
   int ZeroPositionsLeg0 = 115;
   int ZeroPositionsLeg1 = 111;
   int ZeroPositionsLeg2 = 130;
   int ZeroPositionsLeg3 = 115;
-  int ZeroPositionsLeg4 = 105; //112;
-  int ZeroPositionsLeg5 = 110; //105;
-  int ZeroPositionsLeg6 = 190; //175
-  int ZeroPositionsLeg7 = 26; //30;
-  int ZeroPositionsLeg8 = 160; //155;
-  int ZeroPositionsLeg9 = 60; //55;
+  int ZeroPositionsLeg4 = 112; //105; //112;
+  int ZeroPositionsLeg5 = 105; //110; //105;
+  int ZeroPositionsLeg6 = 175; //190; //175
+  int ZeroPositionsLeg7 = 30; //26; //30;
+  int ZeroPositionsLeg8 = 155; //160; //155;
+  int ZeroPositionsLeg9 = 55; //60; //55;
   // {115,111,130,115,105,110,190,26,160,60};
-
 
   double L1 = 0;
   double L2 = 0;
@@ -70,31 +70,6 @@ public:
     L1 = _L1;
     L2 = _L2;
     L3 = _L3;
-  }
-
-  void Sit(){
-  //ZeroPotions[] = {115,111,130,115,105,110,190,26,160,60};
-    //Hip1
-    pwm.setPWM(0, 0, map(ZeroPositionsLeg0,SERVOMINWORK,SERVOMAXWORK, SERVOMINPWMWORK, SERVOMAXPWMWORK));
-    pwm.setPWM(1, 0, map(ZeroPositionsLeg1,SERVOMINWORK,SERVOMAXWORK, SERVOMINPWMWORK, SERVOMAXPWMWORK));
-    //delay(10);
-    //Hip2
-    pwm.setPWM(2, 0, map(ZeroPositionsLeg2,SERVOMINWORK,SERVOMAXWORK, SERVOMINPWMWORK, SERVOMAXPWMWORK));
-    pwm.setPWM(3, 0, map(ZeroPositionsLeg3,SERVOMINWORK,SERVOMAXWORK, SERVOMINPWMWORK, SERVOMAXPWMWORK));
-    //delay(10);
-    //Thigh
-    pwm.setPWM(4, 0, map((ZeroPositionsLeg4 - 42),SERVOMINWORK,SERVOMAXWORK, SERVOMINPWMWORK, SERVOMAXPWMWORK));
-    pwm.setPWM(5, 0, map((ZeroPositionsLeg5 + 45),SERVOMINWORK,SERVOMAXWORK, SERVOMINPWMWORK, SERVOMAXPWMWORK));
-    //delay(10);
-    //Knee36
-    pwm.setPWM(6, 0, map((ZeroPositionsLeg6 - 135),SERVOMINWORK,SERVOMAXWORK, SERVOMINPWMWORK, SERVOMAXPWMWORK)); //40
-    pwm.setPWM(7, 0, map((ZeroPositionsLeg7 + 135),SERVOMINWORK,SERVOMAXWORK, SERVOMINPWMWORK, SERVOMAXPWMWORK));//165
-    //delay(10);
-    //Ankle
-    pwm.setPWM(8, 0, map((ZeroPositionsLeg8 - 94),SERVOMINWORK,SERVOMAXWORK, SERVOMINPWMWORK, SERVOMAXPWMWORK)); //61
-    pwm.setPWM(9, 0, map((ZeroPositionsLeg9 + 92),SERVOMINWORK,SERVOMAXWORK, SERVOMINPWMWORK, SERVOMAXPWMWORK));
-    //delay(10);
-
   }
 
 

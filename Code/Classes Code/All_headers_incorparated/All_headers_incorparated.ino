@@ -85,11 +85,23 @@ double DerivativeGainR = 0.00001; //0.001
 PID PIDPitch(ProportionalGainP, IntegralGainP, DerivativeGainP);
 PID PIDRoll(ProportionalGainR, IntegralGainR, DerivativeGainR);
 
+
+// LED and light
 const int ledTorchPin = 9; // D2 corresponds to GPIO2
 const int ledSidePin = 8; // D2 corresponds to GPIO2
 bool SideOfHeadState = false; //shows when the LED is on or off
 
 int step = 0; //number of loops through the code
+
+
+// Speaker
+int speakerPin = 2;
+#include <Emotions.h>
+Emotions Emote(speakerPin);
+
+//Emotions
+#include <EmotionMovements.hpp>
+EmotionsMovements EmoteMoves(0);
 
 //Uses Zero Potions
 void StraightLeg(){
@@ -203,104 +215,105 @@ void loop() {
 
   if(XController.ControllerFetchReadings()){
     int _CheckFlash = 50;
-    classBD1.NeckCalc();
 
-    
+    if(!EmoteMoves.CheckButtons()){
+      classBD1.NeckCalc();
 
-    if (bitRead(XController.LetterButton, 1)){
-      //digitalWrite(ledTorchPin, HIGH);
-      digitalWrite(ledSidePin, HIGH);
-      
-      Serial.printf("\n ON\n");
-    }else {
-      //removed due to always turning LEDoff eeven if auto turn on happens
-      //digitalWrite(ledTorchPin, LOW);
-      //digitalWrite(ledSidePin, LOW);
-      //Serial.printf("\n OFF\n");
+      if (bitRead(XController.LetterButton, 1)){
+        //digitalWrite(ledTorchPin, HIGH);
+        digitalWrite(ledSidePin, HIGH);
+        
+        Serial.printf("\n ON\n");
+      }else {
+        //removed due to always turning LEDoff eeven if auto turn on happens
+        //digitalWrite(ledTorchPin, LOW);
+        //digitalWrite(ledSidePin, LOW);
+        //Serial.printf("\n OFF\n");
 
-    }
-
-    if (bitRead(XController.LetterButton, 0)){
-      digitalWrite(ledTorchPin, HIGH);
-      //digitalWrite(ledSidePin, HIGH);
-      
-      Serial.printf("\n ON\n");
-    }else {
-      digitalWrite(ledTorchPin, LOW);
-      //digitalWrite(ledSidePin, LOW);
-      
-      Serial.printf("\n OFF\n");
-    }
-
-    //bitRead(XController.LetterButton, 1)
-    //Xbox button turns on legs segment
-    if (bitRead(XController.CenterButton, 0)){
-      _CheckFlash = 40;
-      if (bitRead(XController.DPadButton, 3)){
-        //Walk Forward
-        legRight.setGaitposStepforward(legRight, 0, t, Speed);
-        legRight.XYCalc(legRight.targetX, legRight.targetY);
-
-        legLeft.setGaitposStepforward(legLeft, M_PI, t, Speed);
-        legLeft.XYCalc(legLeft.targetX, legLeft.targetY);
-
-        DriveMotor(0,0,0,0,0);
-
-      }else if(bitRead(XController.DPadButton, 2)){                              ///////////test///////////////
-        //Walk backwards
-        legRight.setGaitposStepforward(legRight, 0, t, -Speed);
-        legRight.XYCalc(legRight.targetX, legRight.targetY);
-
-        legLeft.setGaitposStepforward(legLeft, M_PI, t, -Speed);
-        legLeft.XYCalc(legLeft.targetX, legLeft.targetY);
-
-      }else if(bitRead(XController.CenterButton,1)){                              ///////////test///////////////
-          //PID Controller 
-          legRight.XYCalc(10, 200);
-          legLeft.XYCalc(-5, 200);
-
-          // legRight.XYCalc(0, 200);
-          // legLeft.XYCalc(0, 200);
-
-          MPU6050.ReadValues();
-          MPU6050.CalcPitRoll();
-          PIDPitch.TargetAngle = 0;
-          PIDRoll.TargetAngle = 0;
-
-          PIDPitch.PIDCalc(dt, MPU6050.pitch);
-          PIDRoll.PIDCalc(dt, MPU6050.roll);
-
-          double PitchCorrection = map(PIDPitch.OverallOutput, -100, 100, -30,30);
-          double RollCorrection = map(PIDRoll.OverallOutput, -100, 100, -30,30);
-
-          // legLeft.LeftLeg(PIDPitch.OverallOutput);
-          // legRight.RightLeg(PIDPitch.OverallOutput);
-          // legLeft.LeftHip(PIDRoll.OverallOutput+10, 0);
-          // legRight.RightHip(PIDRoll.OverallOutput+10, 0);
-          DriveMotor(PIDPitch.OverallOutput,(PIDRoll.OverallOutput+10),(PIDRoll.OverallOutput+10),0,0);
-      }else{
-        legRight.XYCalc(10, 200);
-        legLeft.XYCalc(-10, 200);
-        DriveMotor(10,10,0,0,0);
-        // legLeft.LeftLeg(10);
-        // legRight.RightLeg(10);
-        // legLeft.LeftHip(0, 0);
-        // legRight.RightHip(0, 0);
-        //Sat();
       }
 
+      if (bitRead(XController.LetterButton, 0)){
+        digitalWrite(ledTorchPin, HIGH);
+        //digitalWrite(ledSidePin, HIGH);
+        
+        Serial.printf("\n ON\n");
+      }else {
+        digitalWrite(ledTorchPin, LOW);
+        //digitalWrite(ledSidePin, LOW);
+        
+        Serial.printf("\n OFF\n");
+      }
 
-    }else{
+      //bitRead(XController.LetterButton, 1)
+      //Xbox button turns on legs segment
+      if (bitRead(XController.CenterButton, 0)){
+        _CheckFlash = 40;
+        if (bitRead(XController.DPadButton, 3)){
+          //Walk Forward
+          legRight.setGaitposStepforward(legRight, 0, t, Speed);
+          legRight.XYCalc(legRight.targetX, legRight.targetY);
+
+          legLeft.setGaitposStepforward(legLeft, M_PI, t, Speed);
+          legLeft.XYCalc(legLeft.targetX, legLeft.targetY);
+
+          DriveMotor(0,0,0,0,0);
+
+        }else if(bitRead(XController.DPadButton, 2)){                              ///////////test///////////////
+          //Walk backwards
+          legRight.setGaitposStepforward(legRight, 0, t, -Speed);
+          legRight.XYCalc(legRight.targetX, legRight.targetY);
+
+          legLeft.setGaitposStepforward(legLeft, M_PI, t, -Speed);
+          legLeft.XYCalc(legLeft.targetX, legLeft.targetY);
+
+        }else if(bitRead(XController.CenterButton,1)){                              ///////////test///////////////
+            //PID Controller 
+            legRight.XYCalc(10, 200);
+            legLeft.XYCalc(-5, 200);
+
+            // legRight.XYCalc(0, 200);
+            // legLeft.XYCalc(0, 200);
+
+            MPU6050.ReadValues();
+            MPU6050.CalcPitRoll();
+            PIDPitch.TargetAngle = 0;
+            PIDRoll.TargetAngle = 0;
+
+            PIDPitch.PIDCalc(dt, MPU6050.pitch);
+            PIDRoll.PIDCalc(dt, MPU6050.roll);
+
+            double PitchCorrection = map(PIDPitch.OverallOutput, -100, 100, -30,30);
+            double RollCorrection = map(PIDRoll.OverallOutput, -100, 100, -30,30);
+
+            // legLeft.LeftLeg(PIDPitch.OverallOutput);
+            // legRight.RightLeg(PIDPitch.OverallOutput);
+            // legLeft.LeftHip(PIDRoll.OverallOutput+10, 0);
+            // legRight.RightHip(PIDRoll.OverallOutput+10, 0);
+            DriveMotor(PIDPitch.OverallOutput,(PIDRoll.OverallOutput+10),(PIDRoll.OverallOutput+10),0,0);
+        }else{
+          legRight.XYCalc(10, 200);
+          legLeft.XYCalc(-10, 200);
+          DriveMotor(10,10,0,0,0);
+          // legLeft.LeftLeg(10);
+          // legRight.RightLeg(10);
+          // legLeft.LeftHip(0, 0);
+          // legRight.RightHip(0, 0);
+          //Sat();
+        }
 
 
+      }else{
+        Sat();
+
+      }
+      
+      LEDFlashRate(_CheckFlash);
+    }else{      
+      Sat();
+
+      //Every 50 loops it switches value of LED
+      LEDFlashRate(25);
     }
-    
-    LEDFlashRate(_CheckFlash);
-  }else{      
-    Sat();
-
-    //Every 50 loops it switches value of LED
-    LEDFlashRate(25);
   }
   //legLeft.LeftHip(0, 0);
   //legRight.RightHip(0, 0);
