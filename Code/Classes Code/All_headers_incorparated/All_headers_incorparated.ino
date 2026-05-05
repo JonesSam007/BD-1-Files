@@ -53,7 +53,7 @@ double stepMidYPoint = 190;
 double stepMidXPoint = 0;
 double stepXOffset = 15;
 
-int ZeroPotions[] = {115,111,130,115,105,110,190,26,160,60};
+int ZeroPotions[] = {110,111,130,115,105,110,190,26,160,60};
 
 float L1 = 70.85; 
 float L2 = 77;
@@ -92,6 +92,7 @@ const int ledSidePin = 8; // D2 corresponds to GPIO2
 bool SideOfHeadState = false; //shows when the LED is on or off
 
 int step = 0; //number of loops through the code
+int idelCount = 0;
 
 
 // Speaker
@@ -169,6 +170,14 @@ void LEDFlashRate(int CheckVal){
   }
 }
 
+void Idel(){
+  //Idel Checker
+  if (idelCount >= 400){
+    Emote.idleSound();
+    idelCount = 0;
+  }
+}
+
 
 
 void setup() {
@@ -196,6 +205,7 @@ void setup() {
   delay(2000);
   Sat();
   delay(500);
+  legLeft.HookIn();
   // StandPos();
   // delay(1000);
 }
@@ -207,6 +217,8 @@ void loop() {
   start = millis();
   t += dt;
 
+  MPU6050.ReadValues();
+  MPU6050.CalcPitRoll();
 
 
 
@@ -268,8 +280,8 @@ void loop() {
 
         }else if(bitRead(XController.CenterButton,1)){                              ///////////test///////////////
             //PID Controller 
-            legRight.XYCalc(10, 200);
-            legLeft.XYCalc(-5, 200);
+            legRight.XYCalc(0, 200);
+            legLeft.XYCalc(0, 200);
 
             legRight.XYCalc(0, 200);
             legLeft.XYCalc(0, 200);
@@ -291,9 +303,10 @@ void loop() {
             legRight.RightHip(PIDRoll.OverallOutput+10, 0);
             DriveMotor(PIDPitch.OverallOutput,(PIDRoll.OverallOutput+10),(PIDRoll.OverallOutput+10),0,0);
         }else{
-          legRight.XYCalc(10, 200);
-          legLeft.XYCalc(-10, 200);
-          DriveMotor(10,10,0,0,0);
+          
+          legRight.XYCalc(0, 200);
+          legLeft.XYCalc(0, 200);
+          DriveMotor(0,0,0,0,0);
           // legLeft.LeftLeg(10);
           // legRight.RightLeg(10);
           // legLeft.LeftHip(0, 0);
@@ -302,7 +315,7 @@ void loop() {
         }
 
 
-      }else{
+      }else if ((XController.BumperButton < 3) && (XController.BumperButton >=0)){
         Sat();
 
       }
@@ -310,10 +323,12 @@ void loop() {
       LEDFlashRate(_CheckFlash);
     }
   }else{      
-    Sat();
+    Sat(); ///////////////////////////////////////////////////////
 
     //Every 50 loops it switches value of LED
     LEDFlashRate(25);
+    idelCount++;
+    
   }
   
   //legLeft.LeftHip(0, 0);
@@ -322,54 +337,5 @@ void loop() {
   //classBD1.SetMotorAngle(0,0,0,0,0);
   while (millis() - start < 10) {}  // 100Hz Main Loop
   step++;
+  Idel();
 }
-  
-
-  // // legRight.XYCalc(10, 180);
-  // // legLeft.XYCalc(-5, 180);
-
-  // // legRight.XYCalc(0, 200);
-  // // legLeft.XYCalc(0, 200);
-
-
-  // // MPU6050.ReadValues();
-  // // MPU6050.CalcPitRoll();
-  // // PIDPitch.TargetAngle = 0;
-  // // PIDRoll.TargetAngle = 0;
-
-  // // PIDPitch.PIDCalc(dt, MPU6050.pitch);
-  // // PIDRoll.PIDCalc(dt, MPU6050.roll);
-
-  // // double PitchCorrection = map(PIDPitch.OverallOutput, -100, 100, -30,30);
-  // // double RollCorrection = map(PIDRoll.OverallOutput, -100, 100, -30,30);
-
-  // // legLeft.LeftLeg(PIDPitch.OverallOutput);
-  // // legRight.RightLeg(PIDPitch.OverallOutput);
-  // // legLeft.LeftHip(PIDRoll.OverallOutput+10, 0);
-  // // legRight.RightHip(PIDRoll.OverallOutput+10, 0);
-////////////////////////////////////////////////////////////////////////////////////////////////
-
-//     elapsed = millis() - start;
-//   dt = elapsed / 1000.0;
-//   start = millis();
-//   t += dt;
-
-//   legRight.XYCalc(0, 200);
-//   legLeft.XYCalc(0, 170);
-
-//   legLeft.LeftLeg(0);
-//   legRight.RightLeg(0);
-//   //legLeft.LeftHip(0, 0);
-//   //legRight.RightHip(0, 0);
-//   //classBD1.HeadForwards(5);
-//   //classBD1.SetMotorAngle(0,0,0,0,0);
-//   while (millis() - start < 10000) {}  // 100Hz Main Loop
-
-//     Sat();
-//     elapsed = millis() - start;
-//   dt = elapsed / 1000.0;
-//   start = millis();
-//   t += dt;
-//  while (millis() - start < 10000) {}  // 100Hz Main Loop
-
-

@@ -167,8 +167,8 @@ void loop() {
     if (bitRead(XController.CenterButton, 0)){
       
       if (bitRead(XController.DPadButton, 3)){
-        int MappedVal = map(XController.LSYCorrected, -100, 100, -25, 25);
-        Speed = 0.1 + (MappedVal/10);
+        //int MappedVal = map(XController.LSYCorrected, -100, 100, -25, 25);
+        //Speed = 0.1 + (MappedVal/10);
         //Walk Forward
         legRight.setGaitposStepforward(legRight, 0, t, Speed);
         legRight.XYCalc(legRight.targetX, legRight.targetY);

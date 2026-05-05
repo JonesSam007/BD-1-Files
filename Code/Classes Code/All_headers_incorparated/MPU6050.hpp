@@ -15,8 +15,8 @@ public:
 
   float pitch = 0;
   float roll = 0;
-  float offsetPitch = -5.5;
-  float offsetRoll = 0;
+  float offsetPitch = -11.8;
+  float offsetRoll = -2.3;
 
 public:
 
@@ -107,25 +107,25 @@ public:
     mpu.getEvent(&a, &g, &temp);
 
     /* Print out the values */
-    // Serial.print("Acceleration X: ");
-    // Serial.print(a.acceleration.x);
-    // Serial.print(", Y: ");
-    // Serial.print(a.acceleration.y);
-    // Serial.print(", Z: ");
-    // Serial.print(a.acceleration.z);
-    // Serial.println(" m/s^2");
+    Serial.print("Acceleration X: ");
+    Serial.print(a.acceleration.x);
+    Serial.print(", Y: ");
+    Serial.print(a.acceleration.y);
+    Serial.print(", Z: ");
+    Serial.print(a.acceleration.z);
+    Serial.println(" m/s^2");
 
-    // Serial.print("Rotation X: ");
-    // Serial.print(g.gyro.x);
-    // Serial.print(", Y: ");
-    // Serial.print(g.gyro.y);
-    // Serial.print(", Z: ");
-    // Serial.print(g.gyro.z);
-    // Serial.println(" rad/s");
+    Serial.print("Rotation X: ");
+    Serial.print(g.gyro.x);
+    Serial.print(", Y: ");
+    Serial.print(g.gyro.y);
+    Serial.print(", Z: ");
+    Serial.print(g.gyro.z);
+    Serial.println(" rad/s");
 
-    // Serial.print("Temperature: ");
-    // Serial.print(temp.temperature);
-    // Serial.println(" degC");
+    Serial.print("Temperature: ");
+    Serial.print(temp.temperature);
+    Serial.println(" degC");
 
     // Serial.println("");
     //delay(500);
@@ -133,15 +133,15 @@ public:
 
   void CalcPitRoll(){
     
-    pitch = atan2(a.acceleration.z, a.acceleration.x) * 180 / PI + offsetPitch;
-    roll = atan2(-a.acceleration.y, sqrt(a.acceleration.z * a.acceleration.z + a.acceleration.x * a.acceleration.x)) * 180 / PI + offsetRoll;
+    pitch = atan2(a.acceleration.z, a.acceleration.x) * 180 / PI /*+ offsetPitch*/;
+    roll = atan2(-a.acceleration.y, sqrt(a.acceleration.z * a.acceleration.z + a.acceleration.x * a.acceleration.x)) * 180 / PI /*+ offsetRoll*/;
 
-    // Serial.println();
-    // Serial.println();
-    // Serial.print("Pitch: "); Serial.print(pitch);
-    // Serial.print(" | Roll: "); Serial.println(roll);
-    // Serial.println();
-    // Serial.println();
+    Serial.println();
+    Serial.println();
+    Serial.print("Pitch: "); Serial.print(pitch);
+    Serial.print(" | Roll: "); Serial.println(roll);
+    Serial.println();
+    Serial.println();
 
     //delay(100);
   }

@@ -201,5 +201,42 @@ public:
     silence(100);
   }
 
+  void Randomised(){
+    int mood = random(10);
+
+    switch (mood) {
+      case 0:
+        Serial.printf("Happy\n");
+        happySound();
+
+        break;
+      case 1:
+        Serial.printf("curiousSound\n");
+        curiousSound();
+        break;
+      case 2:
+        Serial.printf("sadSound\n");
+        sadSound();
+        break;
+      case 3:
+        Serial.printf("alertSound\n");
+        alertSound();
+        break;
+      case 4:
+        Serial.printf("idleSound\n");
+        idleSound();
+        break;
+      case 5: backChat(); break;
+      case 6: muttering(); break;
+      case 7: nervous(); break;
+      case 8: scared(); break;
+      case 9: delay(100); break;
+    }
+  }
+
   void Quiet(){silence(1);}
 };
+
+
+
+

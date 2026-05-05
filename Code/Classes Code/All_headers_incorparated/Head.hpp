@@ -52,6 +52,8 @@ int LimitHeadTiltMax = 0; //tilt Left
 int LimitHeadRotateMin = 10; //rotate Left
 int LimitHeadRotateMax = 180; //rotate Right
 
+public:
+
   Adafruit_PWMServoDriver& servoDriver;
   double sideParallelPos = 0;
   double ForwardParallelPos = 0;
@@ -79,15 +81,24 @@ public:
     neck.setOscillatorFrequency(27000000);
   }
 
-  void SetMotorAngle(double sideParallelPos, double ForwardParallelPos, double LookUP, double LookSide, double Tilt, double Ear){
-      neck.setPWM(0,0,map(ZeroPositionDeg0 + sideParallelPos, SERVOMINWORK, SERVOMAXWORK, SERVOMINPWMWORK, SERVOMAXPWMWORK));
-      neck.setPWM(1,0,map(ZeroPositionDeg1 + ForwardParallelPos, SERVOMINWORK, SERVOMAXWORK, SERVOMINPWMWORK, SERVOMAXPWMWORK));
-      neck.setPWM(2,0,map(ZeroPositionDeg2 - ForwardParallelPos + LookUP, SERVOMINWORK, SERVOMAXWORK, SERVOMINPWMWORK, SERVOMAXPWMWORK));
-      neck.setPWM(3,0,map(ZeroPositionDeg3 + 2*sideParallelPos + Tilt, SERVOMINDEG90, SERVOMAXDEG90, SERVOMINPWM90, SERVOMAXPWM90));
-      neck.setPWM(4,0,map(ZeroPositionDeg4 + LookSide, SERVOMINDEG90, SERVOMAXDEG90, SERVOMINPWM90, SERVOMAXPWM90));
-      neck.setPWM(5,0,map(ZeroPositionDeg5 + Ear, SERVOMINDEG90, SERVOMAXDEG90, SERVOMINPWM90, SERVOMAXPWM90));
-      neck.setPWM(6,0,map(ZeroPositionDeg6 - Ear, SERVOMINDEG90, SERVOMAXDEG90, SERVOMINPWM90, SERVOMAXPWM90));
+  void SetMotorZeroAngle(/*double sideParallelPos, double ForwardParallelPos, double LookUP, double LookSide, double Tilt, double Ear*/){
+    neck.setPWM(0,0,map(ZeroPositionDeg0, SERVOMINWORK, SERVOMAXWORK, SERVOMINPWMWORK, SERVOMAXPWMWORK));
+    neck.setPWM(1,0,map(ZeroPositionDeg1, SERVOMINWORK, SERVOMAXWORK, SERVOMINPWMWORK, SERVOMAXPWMWORK));
+    neck.setPWM(2,0,map(ZeroPositionDeg2, SERVOMINWORK, SERVOMAXWORK, SERVOMINPWMWORK, SERVOMAXPWMWORK));
+    neck.setPWM(3,0,map(ZeroPositionDeg3, SERVOMINDEG90, SERVOMAXDEG90, SERVOMINPWM90, SERVOMAXPWM90));
+    neck.setPWM(4,0,map(ZeroPositionDeg4, SERVOMINDEG90, SERVOMAXDEG90, SERVOMINPWM90, SERVOMAXPWM90));
+    neck.setPWM(5,0,map(ZeroPositionDeg5, SERVOMINDEG90, SERVOMAXDEG90, SERVOMINPWM90, SERVOMAXPWM90));
+    neck.setPWM(6,0,map(ZeroPositionDeg6, SERVOMINDEG90, SERVOMAXDEG90, SERVOMINPWM90, SERVOMAXPWM90));
+  }
 
+  void SetMotorAngle(/*double sideParallelPos, double ForwardParallelPos, double LookUP, double LookSide, double Tilt, double Ear*/){
+    neck.setPWM(0,0,map(ZeroPositionDeg0 + sideParallelPos, SERVOMINWORK, SERVOMAXWORK, SERVOMINPWMWORK, SERVOMAXPWMWORK));
+    neck.setPWM(1,0,map(ZeroPositionDeg1 + ForwardParallelPos, SERVOMINWORK, SERVOMAXWORK, SERVOMINPWMWORK, SERVOMAXPWMWORK));
+    neck.setPWM(2,0,map(ZeroPositionDeg2 - ForwardParallelPos + LookUP, SERVOMINWORK, SERVOMAXWORK, SERVOMINPWMWORK, SERVOMAXPWMWORK));
+    neck.setPWM(3,0,map(ZeroPositionDeg3 + 2*sideParallelPos + Tilt, SERVOMINDEG90, SERVOMAXDEG90, SERVOMINPWM90, SERVOMAXPWM90));
+    neck.setPWM(4,0,map(ZeroPositionDeg4 + LookSide, SERVOMINDEG90, SERVOMAXDEG90, SERVOMINPWM90, SERVOMAXPWM90));
+    neck.setPWM(5,0,map(ZeroPositionDeg5 + Ear, SERVOMINDEG90, SERVOMAXDEG90, SERVOMINPWM90, SERVOMAXPWM90));
+    neck.setPWM(6,0,map(ZeroPositionDeg6 - Ear, SERVOMINDEG90, SERVOMAXDEG90, SERVOMINPWM90, SERVOMAXPWM90));
   }
 
   void NeckCalc(/*int LSXCorrected, int LSYCorrected, RSYCorrected*/){
@@ -127,14 +138,14 @@ public:
         Ear = 90 - Ear;
       
     }
-    SetMotorAngle(sideParallelPos, ForwardParallelPos, LookUP, LookSide, Tilt, Ear);
+    SetMotorAngle(/*sideParallelPos, ForwardParallelPos, LookUP, LookSide, Tilt, Ear*/);
 
   }
 
   void HeadForwards(int X){
       ForwardParallelPos = BasePitchMid - X;
       //Serial.printf("\n ForwardParallelPos = %f.2\n", ForwardParallelPos);
-      SetMotorAngle(sideParallelPos, ForwardParallelPos, LookUP, LookSide, Tilt, Ear);
+      SetMotorAngle(/*sideParallelPos, ForwardParallelPos, LookUP, LookSide, Tilt, Ear*/);
    
   }
   void HeadWalkGateMotion(double t, double Speed) {
@@ -142,7 +153,7 @@ public:
       sideParallelPos = BaseTiltMid - LimitBaseTiltMin;
     }else{sideParallelPos = BaseTiltMid - LimitBaseTiltMax;}
     //sideParallelPos = stepMidXPoint - (( * cos(Speed * PI * t))); 
-    SetMotorAngle(sideParallelPos, ForwardParallelPos, LookUP, LookSide, Tilt,Ear);
+    SetMotorAngle(/*sideParallelPos, ForwardParallelPos, LookUP, LookSide, Tilt,Ear*/);
   }
 
 };

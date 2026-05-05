@@ -6,6 +6,13 @@ using namespace Eigen;
 
 class Leg {
 public:
+
+  #define SERVOMINPWM90 100  // Minimum pulse length count for Mg90s
+  #define SERVOMAXPWM90 540  // Maximum pulse length count for MG90s
+  int SERVOMINDEG90 = 0;  // Minimum degree
+  int SERVOMAXDEG90 = 180;  // Maximum degree
+  int OffsetDeg90 = 5;
+
   #define SERVOMINPWM 80  // Minimum pulse length count for 996
   #define SERVOMAXPWM 560  // Maximum pulse length count for 996
 
@@ -25,7 +32,7 @@ public:
   double theta4 = 0;
   double theta5 = 0;
 
-  int ZeroPositionsLeg0 = 115;
+  int ZeroPositionsLeg0 = 110;//115
   int ZeroPositionsLeg1 = 111;
   int ZeroPositionsLeg2 = 130;
   int ZeroPositionsLeg3 = 115;
@@ -36,7 +43,8 @@ public:
   int ZeroPositionsLeg8 = 160; //155;
   int ZeroPositionsLeg9 = 60; //55;
   // {115,111,130,115,105,110,190,26,160,60};
-
+  int ZeroPositionsLeg10 = 90; 
+  int ZeroPositionsLeg11 = 90; 
 
   double L1 = 0;
   double L2 = 0;
@@ -55,6 +63,9 @@ public:
   double ZInstepMaxAdd = 15;
   double ZInstepoffset = ZInstepMaxAdd;
 
+  //Angle of the hook that protrudes out
+  double HookOutVal = 25;
+
   Adafruit_PWMServoDriver& servoDriver;
 
 public:
@@ -72,31 +83,10 @@ public:
     L3 = _L3;
   }
 
-  void Sit(){
-  //ZeroPotions[] = {115,111,130,115,105,110,190,26,160,60};
-    //Hip1
-    pwm.setPWM(0, 0, map(ZeroPositionsLeg0,SERVOMINWORK,SERVOMAXWORK, SERVOMINPWMWORK, SERVOMAXPWMWORK));
-    pwm.setPWM(1, 0, map(ZeroPositionsLeg1,SERVOMINWORK,SERVOMAXWORK, SERVOMINPWMWORK, SERVOMAXPWMWORK));
-    //delay(10);
-    //Hip2
-    pwm.setPWM(2, 0, map(ZeroPositionsLeg2,SERVOMINWORK,SERVOMAXWORK, SERVOMINPWMWORK, SERVOMAXPWMWORK));
-    pwm.setPWM(3, 0, map(ZeroPositionsLeg3,SERVOMINWORK,SERVOMAXWORK, SERVOMINPWMWORK, SERVOMAXPWMWORK));
-    //delay(10);
-    //Thigh
-    pwm.setPWM(4, 0, map((ZeroPositionsLeg4 - 42),SERVOMINWORK,SERVOMAXWORK, SERVOMINPWMWORK, SERVOMAXPWMWORK));
-    pwm.setPWM(5, 0, map((ZeroPositionsLeg5 + 45),SERVOMINWORK,SERVOMAXWORK, SERVOMINPWMWORK, SERVOMAXPWMWORK));
-    //delay(10);
-    //Knee36
-    pwm.setPWM(6, 0, map((ZeroPositionsLeg6 - 135),SERVOMINWORK,SERVOMAXWORK, SERVOMINPWMWORK, SERVOMAXPWMWORK)); //40
-    pwm.setPWM(7, 0, map((ZeroPositionsLeg7 + 135),SERVOMINWORK,SERVOMAXWORK, SERVOMINPWMWORK, SERVOMAXPWMWORK));//165
-    //delay(10);
-    //Ankle
-    pwm.setPWM(8, 0, map((ZeroPositionsLeg8 - 94),SERVOMINWORK,SERVOMAXWORK, SERVOMINPWMWORK, SERVOMAXPWMWORK)); //61
-    pwm.setPWM(9, 0, map((ZeroPositionsLeg9 + 92),SERVOMINWORK,SERVOMAXWORK, SERVOMINPWMWORK, SERVOMAXPWMWORK));
-    //delay(10);
 
-  }
-
+///////////////////////////////////////////////////////////////////////////////////////////////
+//Calc
+///////////////////////////////////////////////////////////////////////////////////////////////
 
   //Calc invers kine of xy of leg with end potioning established
   void XYCalc(int x, int y){
@@ -127,7 +117,35 @@ public:
     // Serial.println(theta3);
     // Serial.println();
     
-   }
+  }
+///////////////////////////////////////////////////////////////////////////////////////////////
+//Motor Movements
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+  void Sit(){
+  //ZeroPotions[] = {115,111,130,115,105,110,190,26,160,60};
+    //Hip1
+    pwm.setPWM(0, 0, map(ZeroPositionsLeg0,SERVOMINWORK,SERVOMAXWORK, SERVOMINPWMWORK, SERVOMAXPWMWORK));
+    pwm.setPWM(1, 0, map(ZeroPositionsLeg1,SERVOMINWORK,SERVOMAXWORK, SERVOMINPWMWORK, SERVOMAXPWMWORK));
+    //delay(10);
+    //Hip2
+    pwm.setPWM(2, 0, map(ZeroPositionsLeg2,SERVOMINWORK,SERVOMAXWORK, SERVOMINPWMWORK, SERVOMAXPWMWORK));
+    pwm.setPWM(3, 0, map(ZeroPositionsLeg3,SERVOMINWORK,SERVOMAXWORK, SERVOMINPWMWORK, SERVOMAXPWMWORK));
+    //delay(10);
+    //Thigh
+    pwm.setPWM(4, 0, map((ZeroPositionsLeg4 - 42),SERVOMINWORK,SERVOMAXWORK, SERVOMINPWMWORK, SERVOMAXPWMWORK));
+    pwm.setPWM(5, 0, map((ZeroPositionsLeg5 + 45),SERVOMINWORK,SERVOMAXWORK, SERVOMINPWMWORK, SERVOMAXPWMWORK));
+    //delay(10);
+    //Knee36
+    pwm.setPWM(6, 0, map((ZeroPositionsLeg6 - 135),SERVOMINWORK,SERVOMAXWORK, SERVOMINPWMWORK, SERVOMAXPWMWORK)); //40
+    pwm.setPWM(7, 0, map((ZeroPositionsLeg7 + 135),SERVOMINWORK,SERVOMAXWORK, SERVOMINPWMWORK, SERVOMAXPWMWORK));//165
+    //delay(10);
+    //Ankle
+    pwm.setPWM(8, 0, map((ZeroPositionsLeg8 - 94),SERVOMINWORK,SERVOMAXWORK, SERVOMINPWMWORK, SERVOMAXPWMWORK)); //61
+    pwm.setPWM(9, 0, map((ZeroPositionsLeg9 + 92),SERVOMINWORK,SERVOMAXWORK, SERVOMINPWMWORK, SERVOMAXPWMWORK));
+    //delay(10);
+
+  }
 
   void RightLeg(int ThighOffset){
   
@@ -176,6 +194,20 @@ public:
     //delay(20);
    }
 
+  //Extend hook
+  void HookOut(){
+    pwm.setPWM(10, 0, map((ZeroPositionsLeg10 + HookOutVal), SERVOMINDEG90, SERVOMAXDEG90, SERVOMINPWM90, SERVOMAXPWM90));
+    pwm.setPWM(11, 0, map((ZeroPositionsLeg11 - HookOutVal), SERVOMINDEG90, SERVOMAXDEG90, SERVOMINPWM90, SERVOMAXPWM90));
+   }
+  //Withtrack hook
+  void HookIn(){
+    pwm.setPWM(10, 0, map(ZeroPositionsLeg10, SERVOMINDEG90, SERVOMAXDEG90, SERVOMINPWM90, SERVOMAXPWM90));
+    pwm.setPWM(11, 0, map(ZeroPositionsLeg11, SERVOMINDEG90, SERVOMAXDEG90, SERVOMINPWM90, SERVOMAXPWM90));
+   }
+///////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+//Gait Sweeps
+///////////////////////////////////////////////////////////////////////////////////////////////
   
   void setGaitposStomp(Leg& leg, double phaseOffset, double t, double Speed) {
     targetX = 0; 
@@ -189,7 +221,7 @@ public:
     targetY = stepMidYPoint + ((stepHeight * sin(Speed * PI * t + phaseOffset)));  
     targetZ = 0; 
   }
-
+///////////////////////////////////////////////////////////////////////////////////////////////
 private:
   //MatrixXd computeJacobian(double t1, double t2, double t3, double L1, double L2, double L3);
 };

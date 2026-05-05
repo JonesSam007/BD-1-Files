@@ -60,7 +60,9 @@ public:
       ReadValues();
       //controller.read(&e);
       //Checks();
-      //PrintValues();
+      PrintValues();
+      CheckPrevous();
+      SetPrevous();
       Connected = 1;
       
       
@@ -93,6 +95,11 @@ public:
       }
       
   }
+
+  void CheckPrevous(){}
+
+
+  void SetPrevous(){}
 
 
   void ConvertToUseable(){
